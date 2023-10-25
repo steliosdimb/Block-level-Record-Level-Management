@@ -5,6 +5,7 @@
 /* Η δομή HP_info κρατάει μεταδεδομένα που σχετίζονται με το αρχείο σωρού*/
 typedef struct
 {
+    int file_desc;             // file desc
     int last_block_id;         // id of last block
     int block_record_capacity; // number of records that can be stored in each block
 } HP_info;
