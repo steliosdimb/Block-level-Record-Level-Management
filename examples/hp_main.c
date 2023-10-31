@@ -27,6 +27,9 @@ int main()
 
   HP_info *hp_info2 = HP_OpenFile(FILE_NAME, &file_desc);
 
+  HP_info *info = HP_OpenFile(FILE_NAME);
+  printf("%d \n", info->block_record_capacity);
+  exit(-1);
   Record record;
   srand(12569874);
   int r;
