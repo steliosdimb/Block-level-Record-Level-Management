@@ -1,5 +1,6 @@
 #ifndef HP_FILE_H
 #define HP_FILE_H
+#define HP_ERROR -1
 #include <record.h>
 
 /* Η δομή HP_info κρατάει μεταδεδομένα που σχετίζονται με το αρχείο σωρού*/
@@ -14,7 +15,9 @@ typedef struct
 typedef struct
 {
     int records_in_block; // number of records in this block
+    BF_Block *next_block;  // pointer to next block
 } HP_block_info;
+
 /*Η συνάρτηση HP_CreateFile χρησιμοποιείται για τη δημιουργία και
 κατάλληλη αρχικοποίηση ενός άδειου αρχείου σωρού με όνομα fileName.
 Σε περίπτωση που εκτελεστεί επιτυχώς, επιστρέφεται 0, ενώ σε
@@ -63,5 +66,19 @@ int HP_InsertEntry(
 int HP_GetAllEntries(
     HP_info *header_info, /* επικεφαλίδα του αρχείου*/
     int id /* η τιμή id της εγγραφής στην οποία πραγματοποιείται η αναζήτηση*/);
+
+
+// it iterates through the block and returns a pointer to the section of the metadata
+
+HP_block_info *find_metadata(HP_info *hp_info, HP_block_info *hp_block_info);
+
+
+// inserts record into the desired block 
+// if it returns 0 the block can store the record else it returns -1
+
+int insert_record(HP_info *hp_info, HP_block_info *hp_block_info, void *block, Record record);
+
+
+
 
 #endif // HP_FILE_H
