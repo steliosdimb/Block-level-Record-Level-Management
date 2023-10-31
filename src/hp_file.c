@@ -23,7 +23,7 @@ int HP_CreateFile(char *fileName)
   BF_Block *block;
   BF_Block_Init(&block);
   BF_CreateFile(fileName);     // create block file with name fileName
-  BF_OpenFile(fileName, &fd1); // open block file and get the file desc to it
+  CALL_BF(BF_OpenFile(fileName, &fd1)); // open block file and get the file desc to it
   if (fd1 == -1)
   {
     return (-1); // could not open this file
@@ -71,6 +71,14 @@ int HP_CloseFile(HP_info *hp_info)
 
 int HP_InsertEntry(HP_info *hp_info, Record record)
 {
+  int *blocks_num;
+  BF_Block *block;
+  BF_Block_Init(&block);
+  BF_GetBlock(hp_info->file_desc, 0, block); // load the first block 
+  void* b = BF_Block_GetData(block);
+  
+  
+
   return 0;
 }
 
