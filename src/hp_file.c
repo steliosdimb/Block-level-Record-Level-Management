@@ -61,18 +61,6 @@ HP_info *HP_OpenFile(char *fileName, int *file_desc)
 
   memcpy(hp_info, data, sizeof(HP_info));
   printf("%d\n", hp_info->block_record_capacity);
-  BF_OpenFile(fileName, &fd); // open block file and get the file desc to it
-  BF_GetBlock(fd, 0, block);  // get data from the first block(contains pointer to HP_info)
-  void *data;
-  HP_info *hp_info = malloc(sizeof(HP_info)); // allocate memory to store the hp info data you get from the block
-
-  data = BF_Block_GetData(block); // get a pointer to the data of the block
-  printf("eeee %d\n", hp_info->block_record_capacity);
-
-  if (data == NULL) // if data NULL reuturn NULL
-    return NULL;
-
-  memcpy(hp_info, data, sizeof(HP_info));
 
   BF_UnpinBlock(block);
   BF_Block_Destroy(&block); // unpin block and destroy it ,return hp info
@@ -87,21 +75,15 @@ int HP_CloseFile(int file_desc, HP_info *hp_info)
   return 0;
 }
 
-<<<<<<< HEAD
 int HP_InsertEntry(int file_desc, HP_info *hp_info, Record record)
-=======
 
-int HP_InsertEntry(HP_info *hp_info, Record record)
->>>>>>> 72e6952620e51529289b508269a257ea4a820811
 {
   int *blocks_num;
   void *data;
   BF_Block *block;
   BF_Block_Init(&block);
-<<<<<<< HEAD
   BF_GetBlock(file_desc, 0, block); // load the first block
   void *b = BF_Block_GetData(block);
-=======
   BF_GetBlock(hp_info->file_desc, 0, block); // load the first block
   data = BF_Block_GetData(block);
   if (data == NULL)
@@ -135,7 +117,6 @@ int HP_InsertEntry(HP_info *hp_info, Record record)
   else
   {
   }
->>>>>>> 72e6952620e51529289b508269a257ea4a820811
 
   return 0;
 }

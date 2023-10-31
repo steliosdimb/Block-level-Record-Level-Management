@@ -15,7 +15,7 @@ typedef struct
 typedef struct
 {
     int records_in_block; // number of records in this block
-    BF_Block *next_block;  // pointer to next block
+    BF_Block *next_block; // pointer to next block
 } HP_block_info;
 
 /*Η συνάρτηση HP_CreateFile χρησιμοποιείται για τη δημιουργία και
@@ -75,22 +75,13 @@ int HP_GetAllEntries(
     HP_info *header_info, /* επικεφαλίδα του αρχείου*/
     int id /* η τιμή id της εγγραφής στην οποία πραγματοποιείται η αναζήτηση*/);
 
-<<<<<<< HEAD
-#endif // HP_FILE_H
-=======
-
 // it iterates through the block and returns a pointer to the section of the metadata
 
 HP_block_info *find_metadata(HP_info *hp_info, HP_block_info *hp_block_info);
 
-
-// inserts record into the desired block 
+// inserts record into the desired block
 // if it returns 0 the block can store the record else it returns -1
 
 int insert_record(HP_info *hp_info, HP_block_info *hp_block_info, void *block, Record record);
 
-
-
-
 #endif // HP_FILE_H
->>>>>>> 72e6952620e51529289b508269a257ea4a820811
