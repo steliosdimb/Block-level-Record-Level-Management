@@ -1,5 +1,6 @@
 #ifndef HP_FILE_H
 #define HP_FILE_H
+#define HP_ERROR -1
 #include <record.h>
 
 /* Η δομή HP_info κρατάει μεταδεδομένα που σχετίζονται με το αρχείο σωρού*/
