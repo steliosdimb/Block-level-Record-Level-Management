@@ -71,6 +71,12 @@ int HP_CloseFile(HP_info *hp_info)
 
 int HP_InsertEntry(HP_info *hp_info, Record record)
 {
+  int *blocks_num;
+  BF_Block *block;
+  BF_Block_Init(&block);
+  CALL_BF(BF_GetBlock(hp_info->file_desc, 0, block)); // load the first block
+  void *b = BF_Block_GetData(block);
+
   return 0;
 }
 
