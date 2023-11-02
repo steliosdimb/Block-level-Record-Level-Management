@@ -27,23 +27,23 @@ int main()
 
   HP_info *hp_info2 = HP_OpenFile(FILE_NAME, &file_desc);
 
-  printf("%d \n", hp_info2->block_record_capacity);
-  exit(-1);
   Record record;
   srand(12569874);
   int r;
   printf("Insert Entries\n");
-  for (int id = 0; id < RECORDS_NUM; ++id)
+  for (int id = 0; id < 123; ++id)
   {
+
     record = randomRecord();
     HP_InsertEntry(file_desc, hp_info2, record);
   }
 
   printf("RUN PrintAllEntries\n");
-  int id = rand() % RECORDS_NUM;
+  int id = rand() % 123;
   printf("\nSearching for: %d", id);
   HP_GetAllEntries(file_desc, hp_info2, id);
 
   HP_CloseFile(file_desc, hp_info2);
   BF_Close();
+  remove("data.db");
 }

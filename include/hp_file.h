@@ -1,8 +1,12 @@
 #ifndef HP_FILE_H
 #define HP_FILE_H
-#define HP_ERROR -1
 #include <record.h>
 
+typedef enum HP_ErrorCode
+{
+    HP_ERROR,
+    HP_OK
+} HP_ErrorCode;
 /* Η δομή HP_info κρατάει μεταδεδομένα που σχετίζονται με το αρχείο σωρού*/
 typedef struct
 {
@@ -77,7 +81,9 @@ int HP_GetAllEntries(
 
 // it iterates through the block and returns a pointer to the section of the metadata
 
-HP_block_info *find_metadata(HP_info *hp_info, HP_block_info *hp_block_info);
+HP_block_info *create_metadata(HP_info *hp_info, HP_block_info *hp_block_info);
+
+HP_block_info *find_records_in_block(HP_info *hp_info, HP_block_info *hp_block_info);
 
 // inserts record into the desired block
 // if it returns 0 the block can store the record else it returns -1
