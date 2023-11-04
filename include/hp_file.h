@@ -90,4 +90,10 @@ HP_block_info *find_records_in_block(HP_info *hp_info, HP_block_info *hp_block_i
 
 int insert_record(HP_info *hp_info, HP_block_info *hp_block_info, void *block, Record record);
 
+int HP_Print_All_Records(int file_desc, HP_info *hp_info);
+
+// Prints all records from a block
+
+int HP_Print_Block_Records(HP_block_info *hp_info_block, void *rec, HP_info *hp_info);
+
 #endif // HP_FILE_H

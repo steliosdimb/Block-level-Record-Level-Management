@@ -37,12 +37,11 @@ int main()
     HP_InsertEntry(file_desc, hp_info2, record);
   }
   printf("RUN PrintAllEntries\n");
-  HP_Print_All_Records(file_desc, hp_info2);
+  // HP_Print_All_Records(file_desc, hp_info2);
 
-  
-  // int id = rand() % 112;
-  // printf("\nSearching for: %d\n", id);
-  // //HP_GetAllEntries(file_desc, hp_info2, id);
+  int id = rand() % RECORDS_NUM;
+  printf("\nSearching for: %d\n", id);
+  HP_GetAllEntries(file_desc, hp_info2, id);
   HP_CloseFile(file_desc, hp_info2);
   BF_Close();
   remove("data.db");
