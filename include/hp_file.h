@@ -91,7 +91,7 @@ HP_block_info *find_records_in_block(HP_info *hp_info, HP_block_info *hp_block_i
 // if it returns 0 the block can store the record else it returns -1
 
 int insert_record(HP_info *hp_info, HP_block_info *hp_block_info, void *block, Record record);
-int HP_Print_Block_Records(HP_block_info *hp_info_block, void* data);
+//int HP_Print_Block_Records(HP_block_info *hp_info_block, void* data);
 int HP_Print_All_Records(int file_desc, HP_info *hp_info);
 
 int HP_Print_All_Records(int file_desc, HP_info *hp_info);

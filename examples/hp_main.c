@@ -28,7 +28,7 @@ int main()
   HP_info *hp_info2 = HP_OpenFile(FILE_NAME, &file_desc);
 
   Record record;
-  srand(12569874);
+  srand(1782872);
   int r;
   printf("Insert Entries\n");
   for (int id = 0; id < RECORDS_NUM; ++id)
@@ -37,11 +37,13 @@ int main()
     HP_InsertEntry(file_desc, hp_info2, record);
   }
   printf("RUN PrintAllEntries\n");
-  // HP_Print_All_Records(file_desc, hp_info2);
+  //HP_Print_All_Records(file_desc, hp_info2);
 
   int id = rand() % RECORDS_NUM;
   printf("\nSearching for: %d\n", id);
-  HP_GetAllEntries(file_desc, hp_info2, id);
+  int num = 0; 
+  num = HP_GetAllEntries(file_desc, hp_info2, id);
+  printf("\nNumber of checked Blocks is: %d\n", num);
   HP_CloseFile(file_desc, hp_info2);
   BF_Close();
   remove("data.db");

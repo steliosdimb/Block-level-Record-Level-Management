@@ -192,6 +192,7 @@ int HP_InsertEntry(int file_desc, HP_info *hp_info, Record record)
 int HP_GetAllEntries(int file_desc, HP_info *hp_info, int value)
 {
   int total_blocks = hp_info->last_block_id; // get number of blocks
+  int already_checked = 0; 
   for (int i = 0; i < total_blocks; i++)     // for each block
   {
     BF_Block *temp_block;
@@ -201,19 +202,19 @@ int HP_GetAllEntries(int file_desc, HP_info *hp_info, int value)
     void *rec;
     data = BF_Block_GetData(temp_block);
     rec = BF_Block_GetData(temp_block);
-
+    already_checked++;
     for (int j = 0; j < 6; j++) // for each record in each block
     {
       Record *r = rec + (j * sizeof(Record)); // get record
-      if (r->id == value)                     // if record id equal to value print it and return
+      if (r->id == value)                     // if record id is equal to value print it and return
       {
         printf("\nId: %d\nName: %s\nSurname: %s\nCity: %s\n", r->id, r->name, r->surname, r->city);
+        return already_checked;
       }
     }
     BF_UnpinBlock(temp_block);
     BF_Block_Destroy(&temp_block);
   }
-
   return -1;
 }
 
