@@ -188,11 +188,18 @@ int HP_GetAllEntries(int file_desc, HP_info *hp_info, int value)
         printf("\nId: %d\nName: %s\nSurname: %s\nCity: %s\n", r->id, r->name, r->surname, r->city);
       }
     }
-    BF_UnpinBlock(temp_block);
+    CALL_BF(BF_UnpinBlock(temp_block));
     BF_Block_Destroy(&temp_block);
   }
   printf("blocks red till last record found %d\n", count);
-  return -1;
+  if (count == 0)
+  {
+    return 0;
+  }
+  else
+  {
+    return -1;
+  }
 }
 
 // print all records from a file in file desc
