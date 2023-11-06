@@ -82,6 +82,12 @@ int HP_InsertEntry(int file_desc, HP_info *hp_info, Record record)
 {
   int last_block = hp_info->last_block_id;
   printf("%d\n", last_block);
+  if (last_block == 79)
+  {
+    int num;
+    BF_GetBlockCounter(file_desc, &num);
+    printf("%d \n", num);
+  }
   // if we only have one block (the initial block with meta data) then we need to allocate a new block and insert a record in it
   if (last_block == 0)
   {
@@ -116,13 +122,21 @@ int HP_InsertEntry(int file_desc, HP_info *hp_info, Record record)
   {
     BF_Block *temp_block;
     BF_Block_Init(&temp_block);
+    printf("e\n");
     CALL_BF(BF_GetBlock(file_desc, hp_info->last_block_id, temp_block)); // find last block and pin it
+    printf("e\n");
     void *data;
     void *rec;
     data = BF_Block_GetData(temp_block);
+    printf("e\n");
     rec = BF_Block_GetData(temp_block);
+    printf("e\n");
     HP_block_info *hp_block_info = data;
+    printf("e\n");
+
     hp_block_info = find_records_in_block(hp_info, hp_block_info);
+    printf("e\n");
+
     if (hp_block_info->records_in_block < hp_info->block_record_capacity)
     { // option when the block can store one more record
       int result = insert_record(hp_info, hp_block_info, rec, record);
@@ -134,13 +148,16 @@ int HP_InsertEntry(int file_desc, HP_info *hp_info, Record record)
       else
       {
         printf("inserted record  \n");
+        BF_Block_SetDirty(temp_block);
+        CALL_BF(BF_UnpinBlock(temp_block));
+        BF_Block_Destroy(&temp_block);
       }
     }
     else
     { // option where block is full so we need to allocate new one
       BF_Block *new_block;
       BF_Block_Init(&new_block);
-      CALL_BF(BF_AllocateBlock(hp_info->file_desc, new_block));
+      BF_PrintError(BF_AllocateBlock(hp_info->file_desc, new_block));
       hp_info->last_block_id++;
       void *data;
       void *rec;
@@ -163,10 +180,10 @@ int HP_InsertEntry(int file_desc, HP_info *hp_info, Record record)
       BF_Block_SetDirty(new_block);
       CALL_BF(BF_UnpinBlock(new_block));
       BF_Block_Destroy(&new_block);
+      BF_Block_SetDirty(temp_block);
+      CALL_BF(BF_UnpinBlock(temp_block));
+      BF_Block_Destroy(&temp_block);
     }
-    BF_Block_SetDirty(temp_block);
-    CALL_BF(BF_UnpinBlock(temp_block));
-    BF_Block_Destroy(&temp_block);
   }
 
   return 0;
@@ -184,17 +201,17 @@ int HP_GetAllEntries(int file_desc, HP_info *hp_info, int value)
     void *rec;
     data = BF_Block_GetData(temp_block);
     rec = BF_Block_GetData(temp_block);
-    HP_block_info *HP_block_info = data;
-    HP_block_info = HP_block_info + hp_info->block_record_capacity * sizeof(Record); // find the hp_block_info metadata
-    for (int j = 0; j < HP_block_info->records_in_block; j++)                        // for each record in each block
+
+    for (int j = 0; j < 6; j++) // for each record in each block
     {
       Record *r = rec + (j * sizeof(Record)); // get record
       if (r->id == value)                     // if record id equal to value print it and return
       {
         printf("\nId: %d\nName: %s\nSurname: %s\nCity: %s\n", r->id, r->name, r->surname, r->city);
-        return 0;
       }
     }
+    BF_UnpinBlock(temp_block);
+    BF_Block_Destroy(&temp_block);
   }
 
   return -1;
@@ -202,44 +219,50 @@ int HP_GetAllEntries(int file_desc, HP_info *hp_info, int value)
 
 // print all records from a file in file desc
 
-
 int HP_Print_All_Records(int file_desc, HP_info *hp_info)
 {
   int block_num = hp_info->last_block_id;
   printf("block counter: %d\n", block_num);
-  if(block_num>0){
-    for(int i=0; i<block_num; i++){
+  if (block_num > 0)
+  {
+    for (int i = 1; i < block_num; i++)
+    {
       printf("Block number %d\n", i);
       BF_Block *temp;
       BF_Block_Init(&temp);
-      CALL_BF(BF_GetBlock(file_desc, i+1, temp));
+      CALL_BF(BF_GetBlock(file_desc, i, temp));
+
       void *data;
-      HP_block_info *hp_info = data;
-      HP_Print_Block_Records(hp_info, data);
+      data = BF_Block_GetData(temp);
+      HP_block_info *hp_info_block = data;
+      hp_info_block = find_records_in_block(hp_info, hp_info_block);
+      HP_Print_Block_Records(hp_info_block, data, hp_info);
       CALL_BF(BF_UnpinBlock(temp));
       BF_Block_Destroy(&temp);
     }
     return 0;
   }
-  else  
+  else
     printf("No blocks found!\n");
-    return -1;
+  return -1;
 }
 
 // Prints all records from a block
 
+int HP_Print_Block_Records(HP_block_info *hp_info_block, void *rec, HP_info *hp_info)
+{
 
-int HP_Print_Block_Records(HP_block_info *hp_info_block, void* rec)
-{  
-  printf("aaa");
-  int num = hp_info_block->records_in_block;
+  int num = 6;
+
+  printf("%d \n", num);
+
   printf("eeeeeeeeeeeeeeeeeeeee\n");
   if (num != 0)
   {
     for (int i = 0; i < num; i++)
     {
-      Record *r = rec + i * sizeof(Record);
-      printf("Record number %d\n",i);
+      Record *r = rec + (i * sizeof(Record));
+      printf("Record number %d\n", i);
       printf("\nId: %d\nName: %s\nSurname: %s\nCity: %s\n", r->id, r->name, r->surname, r->city);
     }
     return 0;
@@ -252,6 +275,7 @@ HP_block_info *find_records_in_block(HP_info *hp_info, HP_block_info *hp_block_i
 {
   int pos = hp_info->block_record_capacity * sizeof(Record);
   hp_block_info = hp_block_info + pos; // go to the right position to store hp block info metadata
+  printf("%d wtf\n", hp_block_info->records_in_block);
   return hp_block_info;
 }
 HP_block_info *create_metadata(HP_info *hp_info, HP_block_info *hp_block_info)

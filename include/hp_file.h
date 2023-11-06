@@ -94,4 +94,10 @@ int insert_record(HP_info *hp_info, HP_block_info *hp_block_info, void *block, R
 int HP_Print_Block_Records(HP_block_info *hp_info_block, void* data);
 int HP_Print_All_Records(int file_desc, HP_info *hp_info);
 
+int HP_Print_All_Records(int file_desc, HP_info *hp_info);
+
+// Prints all records from a block
+
+int HP_Print_Block_Records(HP_block_info *hp_info_block, void *rec, HP_info *hp_info);
+
 #endif // HP_FILE_H
