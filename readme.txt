@@ -81,3 +81,7 @@ HP_Print_All_Records
 
 HP_Print_Block_Records
 Εκτυπώνει όλα τα records που υπάρχουν σε ένα block
+
+Note:
+Αν κάτι δεν λειτουργει μπορει να γίνει make clean,και make ξανά
+
