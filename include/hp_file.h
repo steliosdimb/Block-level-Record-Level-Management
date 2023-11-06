@@ -81,23 +81,18 @@ int HP_GetAllEntries(
 
 // it iterates through the block and returns a pointer to the section of the metadata
 
-HP_block_info *create_metadata(HP_info *hp_info, HP_block_info *hp_block_info);
-
-// it returns the hp block info pointer to the section of the blocks metadata 
-
-HP_block_info *find_records_in_block(HP_info *hp_info, HP_block_info *hp_block_info);
+HP_block_info *get_metadata(BF_Block *block);
 
 // inserts record into the desired block
-// if it returns 0 the block can store the record else it returns -1
+// if it returns 0 the block can store the record else it returns -1,also if the record is added metadata is updated
 
 int insert_record(HP_info *hp_info, HP_block_info *hp_block_info, void *block, Record record);
-//int HP_Print_Block_Records(HP_block_info *hp_info_block, void* data);
-int HP_Print_All_Records(int file_desc, HP_info *hp_info);
 
+// iterates every block,and calls hp print block records to print every record in each block
 int HP_Print_All_Records(int file_desc, HP_info *hp_info);
 
 // Prints all records from a block
 
-int HP_Print_Block_Records(HP_block_info *hp_info_block, void *rec, HP_info *hp_info);
+int HP_Print_Block_Records(void *rec, HP_info *hp_info);
 
 #endif // HP_FILE_H
